@@ -2,40 +2,43 @@
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { taskRows } from '../data/examples'
 import TableRow from '../components/TableRow'
-import CoeffTable from '../components/CoeffTable'
 import { useState } from 'react'
 
-export default function PredictionTask() {
+const CONFIDENCE_LEVELS = [
+  'Not at all confident',
+  'Barely confident',
+  'Somewhat confident',
+  'Moderately confident',
+  'Very confident',
+  'Super confident'
+]
+
+export default function InitialPrediction() {
   const { condition } = useParams()
   const navigate = useNavigate()
   const [inputs,setInputs] = useState(Array(taskRows.length).fill(''))
-  const handleChange = (idx,val,hasEvent)=> {
+  const [conf,setConf] = useState('')
+  const handleChange = (idx,val,hasEvent)=>{
     const copy=[...inputs]; copy[idx]=val; setInputs(copy)
-    if(hasEvent && !sessionStorage.getItem('event_popup_seen_'+idx+'_'+condition)) {
-      alert('Heads‑up: An event is scheduled on this day. You may want to adjust your prediction accordingly!')
-      sessionStorage.setItem('event_popup_seen_'+idx+'_'+condition,'1')
+    if(hasEvent && !sessionStorage.getItem('event_popup_seen_pre_'+idx+'_'+condition)) {
+      alert('Event detected for this day – remember it might influence demand!')
+      sessionStorage.setItem('event_popup_seen_pre_'+idx+'_'+condition,'1')
     }
   }
-  const canProceed = inputs.every(v=>v!=='')
+  const canProceed = inputs.every(v=>v!=='') && conf
 
   const handleSubmit = ()=>{
-    const key = `responses_${Date.now()}`
-    const stored = {condition, predictions:inputs, timestamp:Date.now()}
-    // include initial predictions if any
-    const pre = sessionStorage.getItem('pre_predictions')
-    if(pre) stored.initial = JSON.parse(pre)
-    localStorage.setItem(key, JSON.stringify(stored))
-    navigate(`/survey/${condition}`, {state:{condition}})
+    sessionStorage.setItem('pre_predictions', JSON.stringify({predictions:inputs, confidence:conf, condition}))
+    sessionStorage.setItem('pre_q1', conf)
+    navigate(`/examples/${condition}`)
   }
 
-  const showPred = condition!=='A'
-  const showTips = condition==='C'
-  const highlightEvent = condition!=='A'
+  const highlightEvent = true
 
   return (
     <div className="p-4 max-w-6xl mx-auto">
-      <h2 className="text-2xl font-semibold mb-4">Version {condition}: Main Prediction Task</h2>
-      <p className="mb-4 text-sm">Enter your prediction for available bikes on each day. {showPred && 'You may adjust the AI estimate.'}</p>
+      <h2 className="text-2xl font-semibold mb-4">Version {condition}: Pre‑Exposure Prediction</h2>
+      <p className="mb-2 text-sm">Before seeing any AI estimates, please predict the number of available bikes for each day.</p>
       <table className="w-full border rounded-lg overflow-hidden text-sm">
         <thead className="bg-gray-200">
           <tr>
@@ -47,8 +50,6 @@ export default function PredictionTask() {
             <th className="px-2 py-1">Humidity</th>
             <th className="px-2 py-1">Wind</th>
             <th className="px-2 py-1">Event</th>
-            {showPred && <th className="px-2 py-1 bg-blue-100">AI Prediction</th>}
-            {showTips && <th className="px-2 py-1 bg-yellow-100">AI Tip</th>}
             <th className="px-2 py-1">Your Prediction</th>
           </tr>
         </thead>
@@ -57,8 +58,6 @@ export default function PredictionTask() {
             <TableRow
               key={i}
               row={row}
-              showPred={showPred}
-              showTips={showTips}
               highlightEvent={highlightEvent}
               handleChange={val=>handleChange(i,val,row.event===1)}
               userValue={inputs[i]}
@@ -67,21 +66,24 @@ export default function PredictionTask() {
         </tbody>
       </table>
 
-      {condition==='C' && (
-        <div className="mt-6">
-          <h3 className="text-lg font-semibold mb-2">Model Feature Weights</h3>
-          <CoeffTable />
-        </div>
-      )}
+      <div className="mt-6">
+        <label className="block font-medium mb-1">How confident are you in your predictions?</label>
+        <select className="border rounded p-2" value={conf} onChange={e=>setConf(e.target.value)}>
+          <option value="">Select</option>
+          {CONFIDENCE_LEVELS.map(l=>(
+            <option key={l}>{l}</option>
+          ))}
+        </select>
+      </div>
 
       <div className="flex justify-between mt-6">
-        <Link to={`/examples/${condition}`} className="text-blue-600 underline">← Back</Link>
+        <Link to="/" className="text-blue-600 underline">← Back Home</Link>
         <button
           disabled={!canProceed}
           onClick={handleSubmit}
           className={`px-4 py-2 rounded-lg ${canProceed?'bg-blue-600 text-white':'bg-gray-400 text-gray-700 cursor-not-allowed'}`}
         >
-          Submit Predictions →
+          Continue to Guided Examples →
         </button>
       </div>
     </div>
