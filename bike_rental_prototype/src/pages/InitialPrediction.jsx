@@ -142,7 +142,7 @@ export default function InitialPrediction() {
     setInputs(copy);
 
     if (hasEvent && !sessionStorage.getItem(`event_popup_seen_pre_${idx}_${condition}`)) {
-      alert('Event detected for this day – remember it might influence demand!');
+      alert('Event - “Global Harmony” Benefit Concert, Wembley Stadium, London (capacity ≈ 90 000)');
       sessionStorage.setItem(`event_popup_seen_pre_${idx}_${condition}`, '1');
     }
   };

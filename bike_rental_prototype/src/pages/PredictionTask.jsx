@@ -303,7 +303,7 @@ export default function PredictionTask() {
     setInputs(copy);
 
     if (hasEvent && !sessionStorage.getItem(`event_popup_seen_${idx}_${condition}`)) {
-      alert('Heads‑up: An event is scheduled on this day. You may want to adjust your prediction accordingly!');
+      alert('Event - “Midnights at MetLife”, MetLife Stadium, East Rutherford NJ (capacity ≈ 82 500)');
       sessionStorage.setItem(`event_popup_seen_${idx}_${condition}`, '1');
     }
   };
