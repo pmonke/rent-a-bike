@@ -1,0 +1,160 @@
+[
+  {
+    "full_name": "test",
+    "test_type": "B",
+    "predictions": [
+      {
+        "feats": {
+          "date": "2024-06-15",
+          "season": 2,
+          "holiday": 0,
+          "temp": 27,
+          "humidity": 58,
+          "event": 0
+        },
+        "user_prediction": "1"
+      },
+      {
+        "feats": {
+          "date": "2024-11-01",
+          "season": 4,
+          "holiday": 0,
+          "temp": 9,
+          "humidity": 70,
+          "event": 0
+        },
+        "user_prediction": "1"
+      },
+      {
+        "feats": {
+          "date": "2024-10-31",
+          "season": 4,
+          "holiday": 1,
+          "temp": 8,
+          "humidity": 78,
+          "event": 1
+        },
+        "user_prediction": "1"
+      },
+      {
+        "feats": {
+          "date": "2024-02-10",
+          "season": 1,
+          "holiday": 0,
+          "temp": 2,
+          "humidity": 90,
+          "event": 0
+        },
+        "user_prediction": "1"
+      },
+      {
+        "feats": {
+          "date": "2024-08-20",
+          "season": 2,
+          "holiday": 0,
+          "temp": 29,
+          "humidity": 60,
+          "event": 0
+        },
+        "user_prediction": "1"
+      }
+    ],
+    "surveyResults": [
+      {
+        "question": "How confident were you in your initial predictions before seeing any AI?",
+        "answer": "Not at all confident"
+      },
+      {
+        "question": "How confident are you in the final predictions you made?",
+        "answer": "Super confident"
+      },
+      {
+        "question": "How confident are you in the AI model\u2019s prediction?",
+        "answer": "Moderately confident"
+      },
+      {
+        "question": "How helpful was the AI prediction in helping you make your final prediction?",
+        "answer": "Slightly helpful"
+      }
+    ]
+  },
+  {
+    "full_name": "test2",
+    "test_type": "C",
+    "predictions": [
+      {
+        "feats": {
+          "date": "2024-06-15",
+          "season": 2,
+          "holiday": 0,
+          "temp": 27,
+          "humidity": 58,
+          "event": 0
+        },
+        "user_prediction": "1"
+      },
+      {
+        "feats": {
+          "date": "2024-11-01",
+          "season": 4,
+          "holiday": 0,
+          "temp": 9,
+          "humidity": 70,
+          "event": 0
+        },
+        "user_prediction": "1"
+      },
+      {
+        "feats": {
+          "date": "2024-10-31",
+          "season": 4,
+          "holiday": 1,
+          "temp": 8,
+          "humidity": 78,
+          "event": 1
+        },
+        "user_prediction": "1"
+      },
+      {
+        "feats": {
+          "date": "2024-02-10",
+          "season": 1,
+          "holiday": 0,
+          "temp": 2,
+          "humidity": 90,
+          "event": 0
+        },
+        "user_prediction": "1"
+      },
+      {
+        "feats": {
+          "date": "2024-08-20",
+          "season": 2,
+          "holiday": 0,
+          "temp": 29,
+          "humidity": 60,
+          "event": 0
+        },
+        "user_prediction": "1"
+      }
+    ],
+    "surveyResults": [
+      {
+        "question": "How confident were you in your initial predictions before seeing any AI?",
+        "answer": "Somewhat confident"
+      },
+      {
+        "question": "How confident are you in the final predictions you made?",
+        "answer": "Super confident"
+      },
+      {
+        "question": "How confident are you in the AI model\u2019s prediction?",
+        "answer": "Barely confident"
+      },
+      {
+        "question": "How helpful were the AI predictions and weights table in helping you make your final prediction?",
+        "answer": "Somewhat helpful"
+      }
+    ]
+  }
+]

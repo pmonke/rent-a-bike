@@ -14,6 +14,20 @@ export default function TableRow({
     highlightEvent && row.event === 1
       ? 'bg-red-100 hover:bg-red-200'
       : 'hover:bg-gray-100'
+// Formats AI model insights: rounds numbers and colors positives green, negatives red
+const formatTips = tipsStr => {
+  if (!tipsStr) return null;
+  const parts = tipsStr.split(/(-?\d+\.\d+|-?\d+)/g);
+  return parts.map((part, idx) => {
+    if (/^-?\d+(?:\.\d+)?$/.test(part)) {
+      const num = parseFloat(part);
+      const rounded = Math.round(num);
+      const colorClass = num >= 0 ? 'text-green-600' : 'text-red-600';
+      return <span key={idx} className={colorClass}>{rounded}</span>;
+    }
+    return <span key={idx}>{part}</span>;
+  });
+};
 
   return (
     <tr className={trClass}>
@@ -42,7 +56,7 @@ export default function TableRow({
 
       {showTips && (
         <td className="px-2 py-2 italic text-yellow-900 bg-yellow-50 border-l-2 border-yellow-300">
-          {row.tips}
+          {formatTips(row.tips)}
         </td>
       )}
 

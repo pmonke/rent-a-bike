@@ -1,6 +1,6 @@
 
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { exampleRows } from '../data/examples'
+import { exampleRows, mapping } from '../data/examples'
 import TableRow from '../components/TableRow'
 import CoeffTable from '../components/CoeffTable'
 
@@ -26,12 +26,12 @@ export default function ExampleList() {
             <th className="px-2 py-1">Wind</th>
             <th className="px-2 py-1">Event</th>
             {showPred && <th className="px-2 py-1 bg-blue-100">AI Prediction</th>}
-            {showTips && <th className="px-2 py-1 bg-yellow-100">AI Tip</th>}
+            {showTips && <th className="px-2 py-1 bg-yellow-100">AI Explanation</th>}
             <th className="px-2 py-1 bg-green-100">Actual</th>
           </tr>
         </thead>
         <tbody>
-          {exampleRows.map((row,i)=>(
+          {/* {exampleRows.map((row, i) => (
             <TableRow
               key={i}
               row={row}
@@ -40,11 +40,34 @@ export default function ExampleList() {
               showActual={true}
               highlightEvent={highlightEvent}
             />
-          ))}
+          ))} */}
+
+          {exampleRows.map((row, i) => {
+            // map readable labels
+            const readableRow = {
+              ...row,
+              season: mapping.season[row.season] || row.season,
+              holiday: mapping.holiday[row.holiday] || row.holiday,
+              weathersit: mapping.weathersit[row.weathersit] || row.weathersit,
+              event: mapping.event[row.event] || row.event,
+            };
+
+            return (
+              <TableRow
+                key={i}
+                row={readableRow}
+                showPred={showPred}
+                showTips={showTips}
+                showActual={true}
+                highlightEvent={highlightEvent}
+              />
+            );
+          })}
+
         </tbody>
       </table>
 
-      {condition==='C' && (
+      {condition === 'C' && (
         <div className="mt-6">
           <h3 className="text-lg font-semibold mb-2">Model Feature Weights</h3>
           <CoeffTable />
@@ -53,7 +76,7 @@ export default function ExampleList() {
 
       <div className="flex justify-between mt-6">
         <Link to="/" className="text-blue-600 underline">← Back Home</Link>
-        <button onClick={()=>navigate(`/task/${condition}`)} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+        <button onClick={() => navigate(`/task/${condition}`)} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
           Continue to Main Task →
         </button>
       </div>
