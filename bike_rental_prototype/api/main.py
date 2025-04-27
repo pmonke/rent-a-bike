@@ -2,17 +2,14 @@ from flask import Flask, request, jsonify, render_template
 import joblib
 import pandas as pd
 import os
-from flask_cors import CORS  # ✅ ADD THIS
+from flask_cors import CORS
+import json
 
-# Initialize Flask app
-app = Flask(__name__) # ✅ ADD THIS
+app = Flask(__name__)
 CORS(app)
 
-# Load the trained linear regression model
 MODEL_PATH = 'model/linear_regression_model.pkl'
 model = joblib.load(MODEL_PATH)
-
-# Define expected features
 FEATURES = ['season', 'holiday', 'workingday', 'weather',
             'temp', 'atemp', 'humidity', 'windspeed', 'event']
 
@@ -22,8 +19,6 @@ def home():
     Render a simple HTML form for manual input.
     """
     return render_template('index.html', features=FEATURES)
-
-import json
 
 SURVEY_RESULTS_PATH = 'results.json'
 
@@ -51,47 +46,6 @@ def receive_survey():
     return jsonify({"message": "Survey response recorded.", "total_entries": len(existing)})
 
 
-# @app.route('/predict', methods=['POST'])
-# def predict():
-#     """
-#     Accept JSON payload or form data to predict bike demand.
-#     JSON format:
-#     {
-#       "season": 1,
-#       "holiday": 0,
-#       ...
-#     }
-#     """
-#     # Determine data source
-#     data = request.get_json(silent=True)
-#     if data is None:
-#         # Fallback to form data
-#         data = {feat: request.form.get(feat, type=float) for feat in FEATURES}
-#     # Create DataFrame from input
-#     input_df = pd.DataFrame([data], columns=FEATURES)
-#     # Generate prediction
-#     pred = model.predict(input_df)[0]
-#     # Return as JSON
-#     return jsonify({"predicted_count": float(pred)})
-
-
-
-# @app.route('/predict', methods=['POST'])
-# def predict():
-#     """
-#     Accept JSON payload (single object or list of objects).
-#     """
-#     data = request.get_json(force=True)
-
-#     if isinstance(data, dict):
-#         data = [data]  # wrap into list if it's single
-
-#     input_df = pd.DataFrame(data, columns=FEATURES)
-#     preds = model.predict(input_df)
-
-#     # Return list of predictions
-#     return jsonify({"predicted_counts": preds.tolist()})
-
 @app.route('/predict', methods=['POST'])
 def predict():
     """
@@ -100,12 +54,11 @@ def predict():
     data = request.get_json(force=True)
 
     if isinstance(data, dict):
-        data = [data]  # wrap into list if it's single
+        data = [data]  
 
     input_df = pd.DataFrame(data, columns=FEATURES)
     preds = model.predict(input_df)
 
-    # Sanitize: remove negatives + round
     clean_preds = [max(0, round(p, 0)) for p in preds]
 
     return jsonify({"predicted_counts": clean_preds})

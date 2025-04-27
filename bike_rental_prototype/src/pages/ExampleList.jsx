@@ -1,19 +1,54 @@
-
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { exampleRows, mapping } from '../data/examples'
 import TableRow from '../components/TableRow'
 import CoeffTable from '../components/CoeffTable'
 
 export default function ExampleList() {
-  const { condition } = useParams()
-  const navigate = useNavigate()
-  const showPred = condition !== 'A'
-  const showTips = condition === 'C'
+  const { stage, condition } = useParams()
+  
+  const computeExplanation = (row) => {
+    const coeffs = {
+      season: 22.949566,
+      holiday: -8.811922,
+      weathersit: 7.431437,
+      temp: 0.715318,
+      humidity: -2.999312,
+      windspeed: 0.807972,
+      event: 32.919399
+    };
+    const parts = [];
+    let total = 0;
+    const fields = ['season','holiday','weathersit','temp','humidity','windspeed','event'];
+    fields.forEach(f => {
+      const val = row[f];
+      const coef = coeffs[f];
+      const prod = +(coef * val).toFixed(3);
+      total += prod;
+      parts.push(`${coef.toFixed(3)}×${val}=${prod}`);
+    });
+    parts.push(`total=${total.toFixed(3)}`);
+    return parts.join('; ');
+  };
+const navigate = useNavigate()
+  const showPred = stage === 'main' ? (condition !== 'A') : (condition === 'C')
+  const showTips = stage === 'main' && condition === 'C'
   const highlightEvent = condition !== 'A'
 
-  return (
+  const handleContinue = () => {
+    if(stage === 'intro'){
+      if(condition === 'A'){
+        navigate(`/task/${condition}`);
+      }else{
+        navigate(`/initial/${condition}`);
+      }
+    }else{
+      navigate(`/task/${condition}`);
+    }
+  };
+return (
     <div className="p-4 max-w-6xl mx-auto">
       <h2 className="text-2xl font-semibold mb-4">Version {condition}: Guided Examples</h2>
+      <h2 className="text-1 mb-2">Take a look at the data for available bikes at a rental</h2>
       <table className="w-full border rounded-lg overflow-hidden text-sm">
         <thead className="bg-gray-200">
           <tr>
@@ -26,24 +61,13 @@ export default function ExampleList() {
             <th className="px-2 py-1">Wind</th>
             <th className="px-2 py-1">Event</th>
             {showPred && <th className="px-2 py-1 bg-blue-100">AI Prediction</th>}
-            {showTips && <th className="px-2 py-1 bg-yellow-100">AI Explanation</th>}
-            <th className="px-2 py-1 bg-green-100">Actual</th>
+            {showTips && <th className="px-2 py-1 bg-blue-100">AI Explanation</th>}
+            <th className="px-2 py-1 bg-indigo-200 text-indigo-900">Available Bikes</th>
           </tr>
         </thead>
         <tbody>
-          {/* {exampleRows.map((row, i) => (
-            <TableRow
-              key={i}
-              row={row}
-              showPred={showPred}
-              showTips={showTips}
-              showActual={true}
-              highlightEvent={highlightEvent}
-            />
-          ))} */}
 
           {exampleRows.map((row, i) => {
-            // map readable labels
             const readableRow = {
               ...row,
               season: mapping.season[row.season] || row.season,
@@ -51,6 +75,7 @@ export default function ExampleList() {
               weathersit: mapping.weathersit[row.weathersit] || row.weathersit,
               event: mapping.event[row.event] || row.event,
             };
+            if(showTips) readableRow.tips = computeExplanation(row);
 
             return (
               <TableRow
@@ -67,7 +92,7 @@ export default function ExampleList() {
         </tbody>
       </table>
 
-      {condition === 'C' && (
+      {stage === 'main' && condition === 'C' && (
         <div className="mt-6">
           <h3 className="text-lg font-semibold mb-2">Model Feature Weights</h3>
           <CoeffTable />
@@ -75,9 +100,9 @@ export default function ExampleList() {
       )}
 
       <div className="flex justify-between mt-6">
-        <Link to="/" className="text-blue-600 underline">← Back Home</Link>
-        <button onClick={() => navigate(`/task/${condition}`)} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-          Continue to Main Task →
+        <Link to="/" className="text-blue-600 underline">← Back</Link>
+        <button onClick={handleContinue} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+          Continue →
         </button>
       </div>
     </div>

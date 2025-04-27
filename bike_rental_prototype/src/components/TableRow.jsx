@@ -1,4 +1,3 @@
-
 import { mapping } from '../data/examples'
 
 export default function TableRow({
@@ -14,7 +13,6 @@ export default function TableRow({
     highlightEvent && row.event === 1
       ? 'bg-red-100 hover:bg-red-200'
       : 'hover:bg-gray-100'
-// Formats AI model insights: rounds numbers and colors positives green, negatives red
 const formatTips = tipsStr => {
   if (!tipsStr) return null;
   const parts = tipsStr.split(/(-?\d+\.\d+|-?\d+)/g);
@@ -55,15 +53,17 @@ const formatTips = tipsStr => {
       )}
 
       {showTips && (
-        <td className="px-2 py-2 italic text-yellow-900 bg-yellow-50 border-l-2 border-yellow-300">
+        <td className="px-2 py-2 font-semibold text-yellow-900 bg-yellow-50 border-l-2 border-yellow-300">
           {formatTips(row.tips)}
         </td>
       )}
 
       {showActual && (
-        <td className="px-2 py-2 font-semibold text-green-800 bg-green-50 border-l-2 border-green-300">
+        <td
+        className="px-2 py-2 font-semibold text-indigo-900 bg-indigo-100 border-l-2 border-indigo-300">
           {row.actual}
         </td>
+      
       )}
 
       {handleChange && (

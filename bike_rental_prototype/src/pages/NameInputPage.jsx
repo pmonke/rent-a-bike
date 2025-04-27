@@ -11,7 +11,7 @@ export default function NamePage() {
         e.preventDefault();
         if (name.trim()) {
             setFullName(name.trim());
-            navigate('/home'); // after entering name, go to Home
+            navigate('/home'); 
         }
     };
 

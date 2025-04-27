@@ -13,10 +13,7 @@ export default function Home() {
     }
   };
 
-  const getStartPath = (c) => {
-    if (c === 'A') return `/examples/${c}`;
-    return `/initial/${c}`;
-  };
+  const getStartPath = (c) => `/examples/intro/${c}`;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen gap-6 p-6">
@@ -28,7 +25,7 @@ export default function Home() {
             onSubmit={handleNameSubmit}
             className="bg-white p-8 rounded-2xl shadow-lg flex flex-col gap-4"
           >
-            <h2 className="text-2xl font-bold">Enter Your Full Name</h2>
+            <h2 className="text-2xl font-bold">Enter Your Name</h2>
             <input
               type="text"
               value={localName}
@@ -63,7 +60,7 @@ export default function Home() {
             to={getStartPath(c)}
             className="bg-white shadow-md rounded-2xl p-8 hover:shadow-lg transition pointer-events-auto"
             style={{
-              pointerEvents: fullName ? 'auto' : 'none', // disable clicking links until name filled
+              pointerEvents: fullName ? 'auto' : 'none', 
               opacity: fullName ? 1 : 0.5,
             }}
           >
